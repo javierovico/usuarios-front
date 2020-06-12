@@ -5,7 +5,8 @@ import {
   AUTH_LOGOUT
 } from "../actions/auth";
 import { USER_REQUEST } from "../actions/user";
-import apiCall from "@/utils/api";
+// import apiCall from "@/utils/api";
+import axios from "axios";
 
 const state = {
   token: localStorage.getItem("user-token") || "",
@@ -22,22 +23,23 @@ const actions = {
   [AUTH_REQUEST]: ({ commit, dispatch }, user) => {
     return new Promise((resolve, reject) => {
       commit(AUTH_REQUEST);
-      apiCall({ url: "auth/login", data: user, method: "POST" })
+      axios({url: 'auth/login', data: user, method: 'POST' })
         .then(resp => {
-          localStorage.setItem("user-token", resp.access_token);
-          // Here set the header of your ajax library to the token value.
-          // example with axios
-          // axios.defaults.headers.common['Authorization'] = resp.token
-          commit(AUTH_SUCCESS, resp);
-          dispatch(USER_REQUEST);
-          resolve(resp);
+          const token = resp.data.access_token
+          localStorage.setItem('user-token', token) // store the token in localstorage
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+          // console.log(localStorage.getItem('user-token'));
+          commit(AUTH_SUCCESS, token)
+          // you have your token, now log in your user :)
+          dispatch(USER_REQUEST)
+          resolve(resp)
         })
         .catch(err => {
-          commit(AUTH_ERROR, err);
-          console.log("borrando token");
-          localStorage.removeItem("user-token");
-          reject(err);
-        });
+          commit(AUTH_ERROR, err)
+          localStorage.removeItem('user-token') // if the request fails, remove any possible user token if possible
+          delete axios.defaults.headers.common['Authorization']
+          reject(err)
+        })
     });
   },
   [AUTH_LOGOUT]: ({ commit }) => {

@@ -48,6 +48,7 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+// eslint-disable-next-line no-unused-vars
 import {USER_REQUEST} from "@/store/actions/user";
 // import axios from "axios";
 
@@ -58,13 +59,10 @@ export default {
   },
   mounted() {
     if (this.$store.getters.isAuthenticated) {
-      this.$store.dispatch(USER_REQUEST);
+      console.log('logueado')
+
     }
-    // axios.get('/auth/user',{
-    //   headers : {
-    //     Authorization : 'Bearer '+ this.$store.state.getters.pagoMinimo()
-    //   }
-    // });
+    // axios.get('/auth/user');
   }
 }
 </script>

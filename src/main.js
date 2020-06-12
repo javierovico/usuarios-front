@@ -15,7 +15,6 @@ axios.defaults.baseURL = 'http://localhost:82/api';
 // axios.defaults.headers.common['Authorization'] = 'Bearer '+ this.$store.state.user.token;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 const token = localStorage.getItem('user-token')
-console.log(token);
 if (token) {
   axios.defaults.headers.common['Authorization'] = 'Bearer '+token;
 }
