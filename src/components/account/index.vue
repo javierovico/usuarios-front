@@ -4,10 +4,15 @@
   <div>
     <div class="headline">
 <!--      <img src="../../assets/dog-profile.jpeg" />-->
-      <h1>Your doge profile</h1>
+      <h1>Tu perfil</h1>
     </div>
     <p v-if="profile.name">
       <strong>Name:</strong> {{ profile.title }} {{ profile.name }}
+        <br>
+      <strong>Roles:</strong>
+        <template v-for="rol in profile.rols">
+            <p :key="rol.id">{{rol.name}}</p>
+        </template>
     </p>
   </div>
 </template>

@@ -4,6 +4,9 @@ import Home from "@/components/home";
 import Account from "@/components/account";
 import Login from "@/components/login";
 import store from "../store";
+import EditarUsuario from '@/components/editarUsuario';
+import EliminarUsuario from '@/components/eliminarUsuario';
+import AgregarUsuario from '@/components/agregarUsuario';
 
 Vue.use(Router);
 
@@ -42,6 +45,21 @@ export default new Router({
       name: "Login",
       component: Login,
       beforeEnter: ifNotAuthenticated
+    },
+    {
+      path: "/usuario/editar/:id",
+      name: "EditarUsuario",
+      component: EditarUsuario,
+    },
+    {
+      path: "/usuario/eliminar/:id",
+      name: "EliminarUsuario",
+      component: EliminarUsuario,
+    },
+    {
+      path: "/usuario/agregar",
+      name: "AgregarUsuario",
+      component: AgregarUsuario,
     }
   ]
 });

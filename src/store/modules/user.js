@@ -7,7 +7,19 @@ const state = { status: "", profile: {} };
 
 const getters = {
   getProfile: state => state.profile,
-  isProfileLoaded: state => !!state.profile.name
+  isProfileLoaded: state => !!state.profile.name,
+  isAdmin: (state) => {
+    // return state.profile.rols;
+    let ret = false;
+    if(state.profile.rols) {
+      state.profile.rols.forEach(function (e) {
+        if (e.name === 'admin') {
+          ret = true;
+        }
+      })
+    }
+    return ret;
+  }
 };
 
 const actions = {

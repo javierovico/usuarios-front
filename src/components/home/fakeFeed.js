@@ -11,7 +11,7 @@ function feedGenerator(nb) {
 function generateFeed() {
   return {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    content: faker.random.words(20)
+    content: faker.random.words(5)
   };
 }
 

@@ -7,6 +7,7 @@ import {
 import { USER_REQUEST } from "../actions/user";
 // import apiCall from "@/utils/api";
 import axios from "axios";
+import $ from 'jquery';
 
 const state = {
   token: localStorage.getItem("user-token") || "",
@@ -44,6 +45,7 @@ const actions = {
   },
   [AUTH_LOGOUT]: ({ commit }) => {
     return new Promise(resolve => {
+      axios.get('/auth/logout');
       commit(AUTH_LOGOUT);
       localStorage.removeItem("user-token");
       resolve();
@@ -57,11 +59,14 @@ const mutations = {
   },
   [AUTH_SUCCESS]: (state, resp) => {
     state.status = "success";
-    state.token = resp.token;
+    state.token = resp;
     state.hasLoadedOnce = true;
   },
   [AUTH_ERROR]: state => {
     state.status = "error";
+    $.notify({
+      title:'Error autenticando'
+    })
     state.hasLoadedOnce = true;
   },
   [AUTH_LOGOUT]: state => {

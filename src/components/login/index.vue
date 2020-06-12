@@ -2,19 +2,22 @@
 
 <template>
   <div>
-    <form class="login" @submit.prevent="login">
-      <h1>Sign in</h1>
-      <label>User name</label>
-      <input required v-model="username" type="text" placeholder="Snoopy" />
-      <label>Password</label>
-      <input
-        required
-        v-model="password"
-        type="password"
-        placeholder="Password"
-      />
-      <hr />
-      <button type="submit">Login</button>
+    <form @submit.prevent="login">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" v-model="email">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" v-model="password">
+      </div>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+      </div>
+      <button type="submit" class="btn btn-primary" style="margin: 1rem">Ingresar</button>
+      <button type="button" @click.prevent="$router.push('/usuario/agregar')" class="btn btn-primary">Crear Usuario</button>
     </form>
   </div>
 </template>
@@ -35,14 +38,14 @@ export default {
   name: "login",
   data() {
     return {
-      username: "dogo",
-      password: "dogy"
+      email: "admin@usuarios.com.py",
+      password: "adm1n"
     };
   },
   methods: {
     login: function() {
-      const { username, password } = this;
-      this.$store.dispatch(AUTH_REQUEST, { username, password }).then(() => {
+      const { email, password } = this;
+      this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
         this.$router.push("/");
       });
     }

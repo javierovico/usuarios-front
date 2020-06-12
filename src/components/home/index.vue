@@ -3,14 +3,26 @@
 <template>
   <div>
     <loading v-if="loading" />
-    <div v-if="isAuthenticated">
-      <feed-item v-for="(feed, index) in fakeFeed" :key="index" :feed="feed" />
+    <div class="container" v-if="isAuthenticated">
+      <template v-if="isAdmin">
+        <h2>Usuarios Actuales</h2>
+        <div class="row">
+          <feed-item v-for="(feed, index) in usuarios" :key="index" :usuario="feed" />
+        </div>
+        <vue-fab mainBtnColor="#3599DB">
+          <fab-item @clickItem="clickItem" :idx="0" title="Agregar Usuario" icon="add" />
+        </vue-fab>
+      </template>
+      <template v-else>
+        <span>Solo tenes permiso para ver tu propio usuario en <router-link to="/account">Perfil</router-link></span>
+      </template>
     </div>
     <div v-if="!isAuthenticated && authStatus !== 'loading'">
-      <h1>Welcome to DogeBook !</h1>
+      <h1>Inicio de sesion</h1>
       <p>
-        When meeting new doge friends is harder than ever, Dogebook closes the
-        gap between all paws in the world
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
       </p>
       <login />
     </div>
@@ -30,6 +42,7 @@ import fakeFeed from "./fakeFeed";
 import FeedItem from "./feedItem.vue";
 import { mapGetters } from "vuex";
 import Login from "@/components/login";
+import axios from 'axios';
 
 export default {
   components: {
@@ -38,13 +51,48 @@ export default {
   },
   name: "home",
   computed: {
-    ...mapGetters(["isAuthenticated", "authStatus"]),
+    ...mapGetters(["isAuthenticated", "authStatus","isAdmin"]),
     loading: function() {
       return this.authStatus === "loading" && !this.isAuthenticated;
     }
   },
+  mounted(){
+    this.isAuthenticated && this.isAdmin && this.leer()
+  },
   data() {
-    return { fakeFeed };
+    return {
+      fakeFeed,
+      paginaActual: 1,
+      paginaTotal: 1,
+      paginaCantidadItem:20,
+      usuarios: [],
+    };
+  },
+  watch:{
+    isAuthenticated: function () {
+      this.isAdmin && this.leer()
+    },
+    isAdmin: function () {
+      this.isAdmin && this.leer()
+    }
+  },
+  methods:{
+    leer(){
+      let parametroBusqueda = {
+        page: this.paginaActual,
+        cantidad: this.paginaCantidadItem,
+      };
+      axios.get('/user',{params:parametroBusqueda}).then((response) => {
+        this.usuarios = response.data.data;
+        this.paginaTotal = response.data.last_page;
+      }).catch((error)=>{
+        console.log(error);
+        alert(error.toString());
+      });
+    },
+    clickItem(){
+      this.$router.push('/usuario/agregar')
+    }
   }
 };
 </script>
